@@ -1,6 +1,4 @@
-package com.sk.tvschedule;
-
-import com.sk.tvschedule.Service.ApiService;
+package com.sk.tvschedule.api;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -12,7 +10,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RetroClient {
 
 
-    private static final String Base_URL="http://52.50.138.211:8080/ChanelAPI";
+    private static final String Base_URL="http://52.50.138.211:8080/ChanelAPI/";
 
     private static Retrofit getRetrofitInstace(){
         return new Retrofit.Builder()

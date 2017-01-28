@@ -12,9 +12,32 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
+import android.widget.ListView;
+
+import com.sk.tvschedule.adapter.CategoryAdapter;
+import com.sk.tvschedule.api.ApiService;
+import com.sk.tvschedule.api.RetroClient;
+import com.sk.tvschedule.model.Category;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import static android.R.attr.category;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+
+    private ListView listView;
+    private View     parentView;
+
+    private ArrayList<Category> categoryList;
+    private CategoryAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,12 +46,51 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+
+        categoryList= new ArrayList<>();
+        parentView = findViewById(R.id.content_main);
+
+        listView= (ListView)findViewById(R.id.listView);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Snackbar.make(parentView, categoryList.get(position).getTitle() , Snackbar.LENGTH_LONG).show();
+            }
+        });
+
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+
+
+                ApiService api = RetroClient.getService();
+
+                Call<List<Category>> call= api.getMyJSONCategory();
+
+                call.enqueue(new Callback<List<Category>>() {
+                    @Override
+                    public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
+                        if (response.isSuccessful()){
+                            categoryList= (ArrayList<Category>) response.body();
+                            adapter=new CategoryAdapter(MainActivity.this, categoryList);
+                            listView.setAdapter(adapter);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<Category>> call, Throwable t) {
+
+                    }
+
+
+
+                });
+
+
             }
         });
 

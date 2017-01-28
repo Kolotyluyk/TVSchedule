@@ -7,62 +7,62 @@ import com.google.gson.annotations.SerializedName;
  * Created by Сергій on 27.01.2017.
  */
 
-public class Programs  {
+public class Programs {
 
-    @SerializedName("id")
+    @SerializedName("channel_id")
     @Expose
-    private Integer id;
-    @SerializedName("name")
+    private Integer channelId;
+    @SerializedName("date")
     @Expose
-    private String name;
-    @SerializedName("url")
+    private String date;
+    @SerializedName("time")
     @Expose
-    private String url;
-    @SerializedName("picture")
+    private String time;
+    @SerializedName("title")
     @Expose
-    private String picture;
-    @SerializedName("category_id")
+    private String title;
+    @SerializedName("description")
     @Expose
-    private Integer categoryId;
+    private String description;
 
-    public Integer getId() {
-        return id;
+    public Integer getChannelId() {
+        return channelId;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setChannelId(Integer channelId) {
+        this.channelId = channelId;
     }
 
-    public String getName() {
-        return name;
+    public String getDate() {
+        return date;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setDate(String date) {
+        this.date = date;
     }
 
-    public String getUrl() {
-        return url;
+    public String getTime() {
+        return time;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public void setTime(String time) {
+        this.time = time;
     }
 
-    public String getPicture() {
-        return picture;
+    public String getTitle() {
+        return title;
     }
 
-    public void setPicture(String picture) {
-        this.picture = picture;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public Integer getCategoryId() {
-        return categoryId;
+    public String getDescription() {
+        return description;
     }
 
-    public void setCategoryId(Integer categoryId) {
-        this.categoryId = categoryId;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
 }
