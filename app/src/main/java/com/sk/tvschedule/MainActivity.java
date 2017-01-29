@@ -1,5 +1,6 @@
 package com.sk.tvschedule;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -15,10 +16,13 @@ import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.sk.tvschedule.Service.setDate;
 import com.sk.tvschedule.adapter.CategoryAdapter;
+import com.sk.tvschedule.adapter.ChannelAdapter;
 import com.sk.tvschedule.api.ApiService;
 import com.sk.tvschedule.api.RetroClient;
 import com.sk.tvschedule.model.Category;
+import com.sk.tvschedule.model.Channel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,8 +40,8 @@ public class MainActivity extends AppCompatActivity
     private ListView listView;
     private View     parentView;
 
-    private ArrayList<Category> categoryList;
-    private CategoryAdapter adapter;
+ //   private ArrayList<Category> categoryList;
+  //  private CategoryAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,17 +50,20 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
-        categoryList= new ArrayList<>();
+    //    categoryList= new ArrayList<>();
         parentView = findViewById(R.id.content_main);
 
         listView= (ListView)findViewById(R.id.listView);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Snackbar.make(parentView, categoryList.get(position).getTitle() , Snackbar.LENGTH_LONG).show();
+     //           Snackbar.make(parentView, categoryList.get(position).getTitle() , Snackbar.LENGTH_LONG).show();
             }
         });
+
+
+
+       // startService(new Intent(this, setDate.class));
 
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -69,20 +76,20 @@ public class MainActivity extends AppCompatActivity
 
                 ApiService api = RetroClient.getService();
 
-                Call<List<Category>> call= api.getMyJSONCategory();
+                Call<List<Channel>> call= api.getMyJSONChannel();
 
-                call.enqueue(new Callback<List<Category>>() {
+                call.enqueue(new Callback<List<Channel>>() {
                     @Override
-                    public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
+                    public void onResponse(Call<List<Channel>> call, Response<List<Channel>> response) {
                         if (response.isSuccessful()){
-                            categoryList= (ArrayList<Category>) response.body();
-                            adapter=new CategoryAdapter(MainActivity.this, categoryList);
-                            listView.setAdapter(adapter);
+                          List<Channel>  categoryList=  response.body();
+                          ChannelAdapter adapter=new ChannelAdapter(MainActivity.this, categoryList);
+                           listView.setAdapter(adapter);
                         }
                     }
 
                     @Override
-                    public void onFailure(Call<List<Category>> call, Throwable t) {
+                    public void onFailure(Call<List<Channel>> call, Throwable t) {
 
                     }
 
