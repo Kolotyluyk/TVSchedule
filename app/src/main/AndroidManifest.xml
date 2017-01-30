@@ -27,7 +27,7 @@
             android:name=".Service.RestrofitService"
             android:exported="false" />
         <service
-            android:name=".Service.setDate"
+            android:name=".Service.SetDate"
             android:enabled="true"
             android:exported="true"></service>
     </application>

@@ -1,6 +1,5 @@
 package com.sk.tvschedule;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -16,22 +15,16 @@ import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.sk.tvschedule.Service.setDate;
-import com.sk.tvschedule.adapter.CategoryAdapter;
 import com.sk.tvschedule.adapter.ChannelAdapter;
 import com.sk.tvschedule.api.ApiService;
 import com.sk.tvschedule.api.RetroClient;
-import com.sk.tvschedule.model.Category;
 import com.sk.tvschedule.model.Channel;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import static android.R.attr.category;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -63,7 +56,7 @@ public class MainActivity extends AppCompatActivity
 
 
 
-       // startService(new Intent(this, setDate.class));
+       // startService(new Intent(this, SetDate.class));
 
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
