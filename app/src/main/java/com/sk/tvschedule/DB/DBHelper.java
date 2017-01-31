@@ -32,8 +32,8 @@ import android.database.sqlite.SQLiteOpenHelper;
     public static final String columnProgramId ="id";
     public static final String columnProgramChannelId ="channel_id";
     public static final String columnProgramTitle ="title";
-    public static final String columnProgramTime ="time";
-    public static final String columnProgramDate ="date";
+    public static final String columnProgramTime ="p_time";
+    public static final String columnProgramDate ="p_date";
     public static final String columnProgramDescription ="description";
 
     public static final String columnFavoriteID ="id";
@@ -53,39 +53,56 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 
     public void onCreate(SQLiteDatabase db) {
+        createProgram(db);
+        createChannel(db);
+        createFavorite(db);
+        createCategory(db);
+
+    }
 
 
-        db.execSQL("create table "+tableCategory+" ("
-                +columnCategoryId+ " integer primary key,"
-                +columnCategoryTitle+ " text,"
-                +columnCategoryPicture+ " text" + ");");
+   public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
-        db.execSQL("create table "+tableChannel+" ("
-            +columnChannelId+ " integer primary key,"
-            +columnChannelName+ " text,"
-            +columnChannelURL+ " text,"
-            +columnChannelCategorId+ " integer,"
-            +columnChannelPicture+ " text" + ");");
+   }
 
 
+    public void createChannel(SQLiteDatabase db){
+        db.execSQL("create table IF NOT EXISTS "+tableChannel+" ("
+                +columnChannelId+ " integer primary key,"
+                +columnChannelName+ " text,"
+                +columnChannelURL+ " text,"
+                +columnChannelCategorId+ " integer,"
+                +columnChannelPicture+ " text" + ");");
+    }
 
-        db.execSQL("create table "+tableProgram+" ("
-                +columnProgramId+ " integer primary key,"
-                +columnProgramChannelId+" integer"
-                +columnProgramDate+" text,"
-                +columnProgramTime+" text,"
-                +columnProgramTitle+" text,"
-                +columnProgramDescription+" text" + ");");
+   public void createProgram(SQLiteDatabase db) {
+      db.execSQL("create table IF NOT EXISTS "+tableProgram+" ("
+              +columnProgramId+ " integer primary key autoincrement,"
+              +columnProgramChannelId+" integer,"
+              +columnProgramDate+" text,"
+              +columnProgramTime+" text,"
+              +columnProgramTitle+" text,"
+              +columnProgramDescription+" text" + ");");
+   }
 
-
-
-              db.execSQL("create table "+tableFavorite+" ("
-        +columnFavoriteID+" integer primary key autoincrement,"
-        +columnFavoriteChannelID+" integer"+ ");");
+    public void createCategory(SQLiteDatabase db) {
+        db.execSQL("create table IF NOT EXISTS " + tableCategory + " ("
+            + columnCategoryId + " integer primary key,"
+            + columnCategoryTitle + " text,"
+            + columnCategoryPicture + " text" + ");");
     }
 
 
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+    public void createFavorite(SQLiteDatabase db) {        db.execSQL("create table IF NOT EXISTS "+tableFavorite+" ("
+            +columnFavoriteID+" integer primary key autoincrement,"
+            +columnFavoriteChannelID+" integer"+ ");");
+    }
+
+    public void dropTable(SQLiteDatabase db,String table) {
+        db.execSQL("DROP TABLE IF EXISTS " + table);
 
     }
+
+
+
 }

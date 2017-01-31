@@ -17,13 +17,13 @@ import retrofit2.http.Path;
 public interface ApiService {
 
     @GET("categories")
-    Call<List<Category>> getMyJSONCategory();
+    Call<List<Category>> getJSONCategory();
 
     @GET("chanels")
-    Call<List<Channel>> getMyJSONChannel();
+    Call<List<Channel>> getJSONChannel();
 
     @GET("programs/{time}")
-    Call<List<Programs>> getMyJSONPrograms(@Path("time") int time);
+    Call<List<Programs>> getJSONPrograms(@Path("time") int time);
 
 
 }

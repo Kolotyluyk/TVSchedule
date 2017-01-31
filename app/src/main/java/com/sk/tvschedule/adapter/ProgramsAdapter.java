@@ -43,28 +43,28 @@ public Programs getItem(int position) {
 public View getView(int position, View convertView, ViewGroup parent) {
 final ViewHolder viewHolder;
         if (convertView==null){
-        View view=layoutInflater.inflate(R.layout.channel_item,parent,false);
+        View view=layoutInflater.inflate(R.layout.program_item,parent,false);
         viewHolder= ViewHolder.create((RelativeLayout)view);
         view.setTag(viewHolder);
         }else
         viewHolder=(ViewHolder)convertView.getTag();
 
         Programs item=getItem(position);
-        viewHolder.textViewProgramChannelId.setText(item.getChannelId().toString());
-    //     Picasso.with(context).load(item.getPicture()).placeholder(R.mipmap.ic_launcher).error(R.mipmap.ic_launcher).into(viewHolder.imageView);
-    viewHolder.textViewProgramTitle.setText(item.getTitle());
+       viewHolder.textViewProgramChannelId.setText(item.getChannelId().toString());
+         //Picasso.with(context).load(item.getPicture()).placeholder(R.mipmap.ic_launcher).error(R.mipmap.ic_launcher).into(viewHolder.imageView);
+   viewHolder.textViewProgramTitle.setText(item.getTitle());
     viewHolder.textViewProgramTime.setText(item.getTime());
     viewHolder.textViewProgramDate.setText(item.getDate());
-    viewHolder.textViewProgramDescription.setText(item.getDescription());
+   viewHolder.textViewProgramDescription.setText(item.getDescription());
 
-        return viewHolder.relativeLayoutChannel;
+        return viewHolder.relativeLayoutProgram;
 
 
         }
 
 
 private static class ViewHolder {
-    public final RelativeLayout relativeLayoutChannel;
+    public final RelativeLayout relativeLayoutProgram;
  //   public final ImageView image;
     public final TextView textViewProgramChannelId;
     public final TextView textViewProgramTitle;
@@ -75,7 +75,7 @@ private static class ViewHolder {
     public ViewHolder(RelativeLayout relativeLayout /*ImageView imageView*/,TextView textViewProgramChannelId,
             TextView textViewProgramTitle, TextView textViewProgramTime,TextView textViewProgramDate,
              TextView textViewProgramDescription) {
-        this.relativeLayoutChannel = relativeLayout;
+        this.relativeLayoutProgram = relativeLayout;
         this.textViewProgramChannelId = textViewProgramChannelId;
         this.textViewProgramTitle = textViewProgramTitle;
         this.textViewProgramTime = textViewProgramTime;
