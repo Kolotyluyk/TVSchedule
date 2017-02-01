@@ -7,13 +7,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.sk.tvschedule.R;
+import com.sk.tvschedule.data.Data;
 import com.sk.tvschedule.model.Channel;
+import com.sk.tvschedule.model.Programs;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -49,17 +53,27 @@ public class ChannelAdapter extends ArrayAdapter<Channel> {
         }else
             viewHolder=(ViewHolder)convertView.getTag();
 
+        Data data=Data.getInstance();
         Channel item=getItem(position);
         viewHolder.textViewChannelName.setText(item.getName());
         viewHolder.textViewChannelURL.setText(item.getUrl());
         viewHolder.textViewChannelCategory.setText(item.getCategoryId().toString());
         Picasso.with(context).load(item.getPicture()).placeholder(R.mipmap.ic_launcher).error(R.mipmap.ic_launcher).into(viewHolder.imageViewChannel);
-
+        viewHolder.listOfProgram.setAdapter(new ProgramsAdapter(context,getprogram(data.getProgramList(),item.getId())));
         return viewHolder.relativeLayoutChannel;
 
 
     }
 
+    private List<Programs> getprogram(List<Programs> allPrograms,int idChanmel){
+        List<Programs> programs=new ArrayList<>();
+        for (int i=0;i<allPrograms.size();i++)
+            if (allPrograms.get(i).getChannelId()==idChanmel) programs.add(allPrograms.get(i));
+
+        return programs;
+
+
+    }
 
     private static class ViewHolder {
         public final RelativeLayout relativeLayoutChannel;
@@ -67,14 +81,16 @@ public class ChannelAdapter extends ArrayAdapter<Channel> {
         public final TextView textViewChannelName;
         public final TextView textViewChannelURL;
         public final TextView textViewChannelCategory;
+        public final ListView listOfProgram;
 
         public ViewHolder(RelativeLayout relativeLayout, ImageView imageView, TextView textViewChannelName,
-                          TextView textViewChannelURL, TextView textViewChannelCategory) {
+                          TextView textViewChannelURL, TextView textViewChannelCategory,ListView listOfProgram) {
             this.relativeLayoutChannel = relativeLayout;
             this.imageViewChannel = imageView;
             this.textViewChannelURL = textViewChannelURL;
             this.textViewChannelName = textViewChannelName;
             this.textViewChannelCategory = textViewChannelCategory;
+            this.listOfProgram=listOfProgram;
         }
 
         public static ChannelAdapter.ViewHolder create(RelativeLayout relativeLayout) {
@@ -82,9 +98,10 @@ public class ChannelAdapter extends ArrayAdapter<Channel> {
             TextView textViewChannelName = (TextView) relativeLayout.findViewById(R.id.textViewChannelName);
             TextView textViewChannelURL = (TextView) relativeLayout.findViewById(R.id.textViewChannelURL);
             TextView textViewChannelCategory = (TextView) relativeLayout.findViewById(R.id.textViewChannelCategory);
+            ListView listOfProgram = (ListView)relativeLayout.findViewById(R.id.listOfProgram);
 
             return new ChannelAdapter.ViewHolder(relativeLayout,imageViewChannel,textViewChannelName,
-                                                textViewChannelURL,textViewChannelCategory);
+                                                textViewChannelURL,textViewChannelCategory,listOfProgram);
         }
 
 

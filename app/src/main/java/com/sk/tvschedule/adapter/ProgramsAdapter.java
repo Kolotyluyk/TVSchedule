@@ -50,7 +50,7 @@ final ViewHolder viewHolder;
         viewHolder=(ViewHolder)convertView.getTag();
 
         Programs item=getItem(position);
-       viewHolder.textViewProgramChannelId.setText(item.getChannelId().toString());
+     //  viewHolder.textViewProgramChannelId.setText(item.getChannelId().toString());
          //Picasso.with(context).load(item.getPicture()).placeholder(R.mipmap.ic_launcher).error(R.mipmap.ic_launcher).into(viewHolder.imageView);
    viewHolder.textViewProgramTitle.setText(item.getTitle());
     viewHolder.textViewProgramTime.setText(item.getTime());
@@ -66,17 +66,17 @@ final ViewHolder viewHolder;
 private static class ViewHolder {
     public final RelativeLayout relativeLayoutProgram;
  //   public final ImageView image;
-    public final TextView textViewProgramChannelId;
+  //  public final TextView textViewProgramChannelId;
     public final TextView textViewProgramTitle;
     public final TextView textViewProgramTime;
     public final TextView textViewProgramDate;
     public final TextView textViewProgramDescription;
 
-    public ViewHolder(RelativeLayout relativeLayout /*ImageView imageView*/,TextView textViewProgramChannelId,
+    public ViewHolder(RelativeLayout relativeLayout /*ImageView imageView*/,
             TextView textViewProgramTitle, TextView textViewProgramTime,TextView textViewProgramDate,
              TextView textViewProgramDescription) {
         this.relativeLayoutProgram = relativeLayout;
-        this.textViewProgramChannelId = textViewProgramChannelId;
+      //  this.textViewProgramChannelId = textViewProgramChannelId;
         this.textViewProgramTitle = textViewProgramTitle;
         this.textViewProgramTime = textViewProgramTime;
         this.textViewProgramDate = textViewProgramDate;
@@ -87,13 +87,13 @@ private static class ViewHolder {
       //  ImageView imageView = (ImageView) relativeLayout.findViewById(R.id.imageView);
 
 
-        TextView textViewProgramChannelID = (TextView) relativeLayout.findViewById(R.id.textViewProgramChannelId);
+     //   TextView textViewProgramChannelID = (TextView) relativeLayout.findViewById(R.id.textViewProgramChannelId);
         TextView textViewProgramTitle = (TextView) relativeLayout.findViewById(R.id.textViewProgramTitle);
         TextView textViewProgramDate = (TextView) relativeLayout.findViewById(R.id.textViewdProgramDate);
         TextView textViewProgramTime = (TextView) relativeLayout.findViewById(R.id.textViewProgramTime);
         TextView textViewProgramDescription = (TextView) relativeLayout.findViewById(R.id.textViewProgramDescription);
 
-        return new ProgramsAdapter.ViewHolder(relativeLayout,textViewProgramChannelID,
+        return new ProgramsAdapter.ViewHolder(relativeLayout,
                  textViewProgramTitle, textViewProgramTime, textViewProgramDate,
                   textViewProgramDescription);
     }

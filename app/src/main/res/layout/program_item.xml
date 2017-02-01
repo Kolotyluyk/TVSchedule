@@ -6,52 +6,39 @@
         android:text="TextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="26dp"
-        android:id="@+id/textViewProgramChannelId"
         android:textColor="@android:color/background_dark"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="15dp" />
+        android:id="@+id/textViewProgramTime"
+        android:layout_marginStart="17dp"
+        android:layout_above="@+id/textViewdProgramDate"
+        android:layout_alignParentStart="true" />
 
     <TextView
         android:text="TextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="68dp"
+        android:layout_marginStart="25dp"
         android:id="@+id/textViewProgramTitle"
-        android:layout_alignBaseline="@+id/textViewProgramChannelId"
-        android:layout_alignBottom="@+id/textViewProgramChannelId"
         android:textColor="@android:color/background_dark"
-        android:layout_toEndOf="@+id/textViewProgramChannelId" />
-
-    <TextView
-        android:text="TextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textViewProgramTitle"
-        android:layout_alignEnd="@+id/textViewProgramTitle"
-        android:textColor="@android:color/background_dark"
-        android:layout_marginTop="41dp"
-        android:id="@+id/textViewProgramDescription" />
+        android:layout_marginTop="21dp"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/textViewProgramTime" />
 
     <TextView
         android:text="TextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/textViewdProgramDate"
-        android:layout_below="@+id/textViewProgramChannelId"
-        android:layout_alignStart="@+id/textViewProgramChannelId"
         android:textColor="@android:color/background_dark"
-        android:layout_marginStart="19dp"
-        android:layout_marginTop="20dp" />
+        android:layout_marginEnd="32dp"
+        android:layout_below="@+id/textViewProgramTitle"
+        android:layout_alignParentEnd="true" />
 
     <TextView
         android:text="TextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/textViewdProgramDate"
-        android:layout_toEndOf="@+id/textViewProgramDescription"
         android:textColor="@android:color/background_dark"
-        android:layout_marginStart="60dp"
-        android:id="@+id/textViewProgramTime" />
+        android:id="@+id/textViewProgramDescription"
+        android:layout_below="@+id/textViewdProgramDate"
+        android:layout_alignStart="@+id/textViewProgramTitle" />
 </RelativeLayout>

@@ -16,33 +16,39 @@
         android:text="TextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/textViewChannelCategory"
+        android:id="@+id/textViewChannelURL"
         android:gravity="center"
         android:textSize="24sp"
-        android:layout_marginTop="32dp"
-        android:layout_below="@+id/imageViewChannel"
         android:textColor="@android:color/background_dark"
+        android:layout_below="@+id/imageViewChannel"
         android:layout_alignParentStart="true" />
 
     <TextView
         android:text="TextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/textViewChannelURL"
+        android:id="@+id/textViewChannelCategory"
         android:gravity="center"
         android:textSize="24sp"
-        android:layout_marginTop="20dp"
-        android:layout_below="@+id/textViewChannelCategory"
+        android:layout_marginTop="21dp"
         android:textColor="@android:color/background_dark"
+        android:layout_below="@+id/textViewChannelURL"
         android:layout_alignParentStart="true" />
 
     <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
         app:srcCompat="@drawable/ic_menu_gallery"
         android:id="@+id/imageViewChannel"
-        android:layout_marginTop="31dp"
         android:layout_below="@+id/textViewChannelName"
-        android:layout_alignParentStart="true" />
+        android:layout_centerHorizontal="true" />
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="1800dp"
+        android:id="@+id/listOfProgram"
+        android:layout_below="@+id/textViewChannelCategory"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="5dp" />
 
 </RelativeLayout>

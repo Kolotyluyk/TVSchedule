@@ -2,7 +2,6 @@ package com.sk.tvschedule;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -15,8 +14,8 @@ import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.sk.tvschedule.DB.GetData;
-import com.sk.tvschedule.DB.SetData;
+import com.sk.tvschedule.DB.DB;
+import com.sk.tvschedule.DB.AsynTaskLoadToDB;
 import com.sk.tvschedule.adapter.CategoryAdapter;
 import com.sk.tvschedule.adapter.ChannelAdapter;
 import com.sk.tvschedule.adapter.ProgramsAdapter;
@@ -28,13 +27,12 @@ import com.sk.tvschedule.model.Channel;
 import com.sk.tvschedule.model.Programs;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import static com.sk.tvschedule.DB.DBHelper.dBName;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -43,10 +41,11 @@ public class MainActivity extends AppCompatActivity
     private ListView listView;
     private View     parentView;
     Data data;
-    GetData getData;
+    DB getData;
     CategoryAdapter  categoryAdapter;
     ChannelAdapter channeladapter;
     ProgramsAdapter programadapter;
+    boolean flag=false;
 
  //   private ArrayList<Category> categoryList;
   //  private CategoryAdapter channeladapter;
@@ -63,6 +62,16 @@ public class MainActivity extends AppCompatActivity
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                if(listView.getAdapter().equals(categoryAdapter)){
+                    int categoryId=categoryAdapter.getItem(position).getId();
+                    channeladapter=new ChannelAdapter(getApplicationContext(),sortCategory(categoryId,  data.getChannelList()));
+                    listView.setAdapter(channeladapter);
+                    flag=true;
+                }
+                else
+                if(listView.getAdapter().equals(channeladapter))  ;
+           //     if(listView.getAdapter().equals(programadapter)) Snackbar.make(parentView, programadapter.getItem(position).getTitle() , Snackbar.LENGTH_LONG).show();
                 //           Snackbar.make(parentView, categoryList.get(position).getTitle() , Snackbar.LENGTH_LONG).show();
             }
         });
@@ -75,7 +84,7 @@ public class MainActivity extends AppCompatActivity
         }
         else {
 
-            getData=new GetData(MainActivity.this);
+            getData=new DB(MainActivity.this);
 
             data.setProgramList(getData.getProgram());
             data.setChannelList(getData.getChannel());
@@ -87,7 +96,8 @@ public class MainActivity extends AppCompatActivity
             programadapter = new ProgramsAdapter(getApplicationContext(), data.getProgramList());
 
             listView.setAdapter(channeladapter);
-        }
+
+            }
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -146,6 +156,8 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
+        if(flag) setChannel();
+
         if (id == R.id.nav_camera) {
 
            listView.setAdapter(programadapter);
@@ -155,9 +167,6 @@ public class MainActivity extends AppCompatActivity
                  listView.setAdapter(channeladapter);
         } else if (id == R.id.nav_manage) {
 
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
 
         }
 
@@ -171,6 +180,7 @@ public class MainActivity extends AppCompatActivity
 
 
     public void loadInformation(){
+
         ApiService api = RetroClient.getService();
         Call<List<Channel>> callChannel= api.getJSONChannel();
         callChannel.enqueue(new Callback<List<Channel>>() {
@@ -178,12 +188,15 @@ public class MainActivity extends AppCompatActivity
             public void onResponse(Call<List<Channel>> call, Response<List<Channel>> response) {
                 if (response.isSuccessful()){
                     data.setChannelList(response.body());
-                 //   channeladapter.addAll(data.getChannelList());
-                    SetData setDate=new SetData(getApplicationContext(),1);
-                    setDate.setChannelList(data.getChannelList());
-                    setDate.run();
+                    AsynTaskLoadToDB insert=new AsynTaskLoadToDB();
+                    insert.setContext(getApplicationContext());
+                    insert.execute(1);
+                   // SetData setDate=new SetData(getApplicationContext());
+                  //  setDate.setChannelList(data.getChannelList());
+                  //  setDate.run();
                     channeladapter = new ChannelAdapter(getApplicationContext(), data.getChannelList());
                     listView.setAdapter(channeladapter);
+
                 }
             }
             @Override
@@ -191,20 +204,17 @@ public class MainActivity extends AppCompatActivity
 
             }
         });
-
-
         Call<List<Category>> callCategory= api.getJSONCategory();
         callCategory.enqueue(new Callback<List<Category>>() {
             @Override
             public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
                 if (response.isSuccessful()){
                     data.setCategoryList(response.body());
-                    SetData setDate=new SetData(getApplicationContext(),0);
-                    setDate.setCategoryList(data.getCategoryList());
-                    setDate.run();
-                   //  categoryAdapter.addAll(data.getCategoryList());
-                    //     listView.setAdapter(channeladapter);
+                    AsynTaskLoadToDB insert=new AsynTaskLoadToDB();
+                    insert.setContext(getApplicationContext());
+                    insert.execute(0);
                     categoryAdapter = new CategoryAdapter(getApplicationContext(), data.getCategoryList());
+
                 }
             }
             @Override
@@ -221,10 +231,9 @@ public class MainActivity extends AppCompatActivity
                 if (response.isSuccessful()){
                     List<Programs>  categoryList=  response.body();
                     data.setProgramList(response.body());
-                    SetData setDate=new SetData(getApplicationContext(),2);
-                    setDate.setProgramList(data.getProgramList());
-                   // programadapter.addAll(data.getProgramList());
-                    setDate.run();
+                    AsynTaskLoadToDB insert=new AsynTaskLoadToDB();
+                    insert.setContext(getApplicationContext());
+                    insert.execute(2);
                     programadapter = new ProgramsAdapter(getApplicationContext(), data.getProgramList());
 
 
@@ -239,5 +248,20 @@ public class MainActivity extends AppCompatActivity
 
         });
 
+    }
+
+
+
+    public List<Channel> sortCategory(final int categoryId, List<Channel> allchannel){
+        ArrayList<Channel> channels= new ArrayList<>();
+            for(int i=0;i<allchannel.size();i++)
+                if (allchannel.get(i).getCategoryId()==categoryId) channels.add(allchannel.get(i));
+        return channels;
+    }
+
+
+    public void setChannel(){
+        if (flag)   channeladapter = new ChannelAdapter(getApplicationContext(), data.getChannelList());
+                    flag=false;
     }
 }
