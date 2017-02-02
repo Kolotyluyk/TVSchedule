@@ -20,6 +20,8 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.sk.tvschedule.R.id.listView;
+
 /**
  * Created by Сергій on 27.01.2017.
  */
@@ -60,6 +62,14 @@ public class ChannelAdapter extends ArrayAdapter<Channel> {
         viewHolder.textViewChannelCategory.setText(item.getCategoryId().toString());
         Picasso.with(context).load(item.getPicture()).placeholder(R.mipmap.ic_launcher).error(R.mipmap.ic_launcher).into(viewHolder.imageViewChannel);
         viewHolder.listOfProgram.setAdapter(new ProgramsAdapter(context,getprogram(data.getProgramList(),item.getId())));
+
+        ViewGroup.LayoutParams params = viewHolder.listOfProgram.getLayoutParams();
+        int a=viewHolder.listOfProgram.getCount();
+        params.height = 200 + (270 * (viewHolder.listOfProgram.getCount()));
+        viewHolder.listOfProgram.setLayoutParams(params);
+        viewHolder.listOfProgram.requestLayout();
+
+
         return viewHolder.relativeLayoutChannel;
 
 

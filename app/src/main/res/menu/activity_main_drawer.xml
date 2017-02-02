@@ -4,20 +4,22 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_camera"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="Всі програми" />
+
+            android:title="   Всі програми"
+            android:textSize="24sp" />
+
         <item
             android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="Категорії" />
+            android:textSize="24sp"
+            android:title="   Категорії" />
         <item
             android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="Канали" />
+            android:textSize="24sp"
+            android:title="   Канали" />
         <item
             android:id="@+id/nav_manage"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="Олюблені" />
+            android:textSize="24sp"
+            android:title="   Олюблені" />
     </group>
 
 </menu>

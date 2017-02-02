@@ -171,7 +171,7 @@ public class DB {
     public void saveProgram() {
         if (programList.size()!=0){
             SQLiteDatabase db = dbHelper.getWritableDatabase();
-            //    dbHelper.dropTable(db, tableProgram);
+               dbHelper.dropTable(db, tableProgram);
             dbHelper.createProgram(db);
             for (int i = 0; i < programList.size(); i++) {
                 ContentValues cv = new ContentValues();
@@ -189,7 +189,7 @@ public class DB {
     public void saveCategory() {
         if (categoryList.size()!=0){
             SQLiteDatabase db = dbHelper.getWritableDatabase();
-            //    dbHelper.dropTable(db, tableCategory);
+                dbHelper.dropTable(db, tableCategory);
             dbHelper.createCategory(db);
             for (int i=0;i<categoryList.size();i++) {
                 ContentValues cv = new ContentValues();
@@ -205,7 +205,7 @@ public class DB {
     public void saveChannel() {
         if (channelList.size()!=0){
             SQLiteDatabase db = dbHelper.getWritableDatabase();
-            //    dbHelper.dropTable(db, tableChannel);
+                dbHelper.dropTable(db, tableChannel);
             dbHelper.createChannel(db);
             for (int i=0;i<channelList.size();i++){
                 ContentValues cv = new ContentValues();

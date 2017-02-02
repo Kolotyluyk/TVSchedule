@@ -1,6 +1,9 @@
 package com.sk.tvschedule;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -47,6 +50,9 @@ public class MainActivity extends AppCompatActivity
     ProgramsAdapter programadapter;
     boolean flag=false;
 
+    ProgressDialog pd;
+    Handler h;
+
  //   private ArrayList<Category> categoryList;
   //  private CategoryAdapter channeladapter;
 
@@ -54,8 +60,14 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+
+
 
         parentView = findViewById(R.id.content_main);
         listView= (ListView)findViewById(R.id.listView);
@@ -71,9 +83,7 @@ public class MainActivity extends AppCompatActivity
                 }
                 else
                 if(listView.getAdapter().equals(channeladapter))  ;
-           //     if(listView.getAdapter().equals(programadapter)) Snackbar.make(parentView, programadapter.getItem(position).getTitle() , Snackbar.LENGTH_LONG).show();
-                //           Snackbar.make(parentView, categoryList.get(position).getTitle() , Snackbar.LENGTH_LONG).show();
-            }
+              }
         });
 
        data=Data.getInstance();
@@ -103,8 +113,32 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-              //  Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-              //          .setAction("Action", null).show();
+                pd = new ProgressDialog(MainActivity.this);
+                pd.setTitle("Title");
+                pd.setMessage("Message");
+                // меняем стиль на индикатор
+                pd.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                // устанавливаем максимум
+                pd.setMax(2148);
+                // включаем анимацию ожидания
+                pd.setIndeterminate(true);
+                pd.show();
+                h = new Handler() {
+                    public void handleMessage(Message msg) {
+                        // выключаем анимацию ожидания
+                        pd.setIndeterminate(false);
+                        if (pd.getProgress() < pd.getMax()) {
+                            // увеличиваем значения индикаторов
+                            pd.incrementProgressBy(500);
+                            pd.incrementSecondaryProgressBy(45);
+                            h.sendEmptyMessageDelayed(0, 100);
+                        } else {
+                            pd.dismiss();
+                        }
+                    }
+                };
+                h.sendEmptyMessageDelayed(0, 2000);
+             loadInformation();
             }
         });
 
@@ -224,7 +258,8 @@ public class MainActivity extends AppCompatActivity
         });
 
 
-        Call<List<Programs>> callProgram= api.getJSONPrograms((int) System.currentTimeMillis());
+
+        Call<List<Programs>> callProgram= api.getJSONPrograms( System.currentTimeMillis());
         callProgram.enqueue(new Callback<List<Programs>>() {
             @Override
             public void onResponse(Call<List<Programs>> call, Response<List<Programs>> response) {
@@ -235,7 +270,7 @@ public class MainActivity extends AppCompatActivity
                     insert.setContext(getApplicationContext());
                     insert.execute(2);
                     programadapter = new ProgramsAdapter(getApplicationContext(), data.getProgramList());
-
+                    listView.setAdapter(channeladapter);
 
                 }
             }

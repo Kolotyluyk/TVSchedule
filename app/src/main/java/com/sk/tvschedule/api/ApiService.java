@@ -23,7 +23,7 @@ public interface ApiService {
     Call<List<Channel>> getJSONChannel();
 
     @GET("programs/{time}")
-    Call<List<Programs>> getJSONPrograms(@Path("time") int time);
+    Call<List<Programs>> getJSONPrograms(@Path("time") long time);
 
 
 }
