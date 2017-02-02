@@ -114,8 +114,8 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 pd = new ProgressDialog(MainActivity.this);
-                pd.setTitle("Title");
-                pd.setMessage("Message");
+                pd.setTitle("Завантаження");
+                pd.setMessage("Зачекайте, завантажуються дані");
                 // меняем стиль на индикатор
                 pd.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
                 // устанавливаем максимум
