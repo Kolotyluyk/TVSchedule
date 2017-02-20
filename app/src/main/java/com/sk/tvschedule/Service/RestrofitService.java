@@ -4,6 +4,23 @@ import android.app.IntentService;
 import android.content.Intent;
 import android.content.Context;
 
+import com.sk.tvschedule.DB.AsynTaskLoadToDB;
+import com.sk.tvschedule.adapter.CategoryAdapter;
+import com.sk.tvschedule.adapter.ChannelAdapter;
+import com.sk.tvschedule.adapter.ProgramsAdapter;
+import com.sk.tvschedule.api.ApiService;
+import com.sk.tvschedule.api.RetroClient;
+import com.sk.tvschedule.data.Data;
+import com.sk.tvschedule.model.Category;
+import com.sk.tvschedule.model.Channel;
+import com.sk.tvschedule.model.Programs;
+
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 /**
  * An {@link IntentService} subclass for handling asynchronous task requests in
  * a service on a separate handler thread.
@@ -12,78 +29,106 @@ import android.content.Context;
  * helper methods.
  */
 public class RestrofitService extends IntentService {
-    // TODO: Rename actions, choose action names that describe tasks that this
-    // IntentService can perform, e.g. ACTION_FETCH_NEW_ITEMS
-    private static final String ACTION_FOO = "com.sk.tvschedule.action.FOO";
-    private static final String ACTION_BAZ = "com.sk.tvschedule.action.BAZ";
 
-    // TODO: Rename parameters
-    private static final String EXTRA_PARAM1 = "com.sk.tvschedule.extra.PARAM1";
-    private static final String EXTRA_PARAM2 = "com.sk.tvschedule.extra.PARAM2";
+    private Context mContext;
 
     public RestrofitService() {
-        super("RestrofitService");
-    }
-
-
-
-    public static void startActionFoo(Context context, String param1, String param2) {
-        Intent intent = new Intent(context, RestrofitService.class);
-        intent.setAction(ACTION_FOO);
-        intent.putExtra(EXTRA_PARAM1, param1);
-        intent.putExtra(EXTRA_PARAM2, param2);
-        context.startService(intent);
-
-
-
-    }
-
-    /**
-     * Starts this service to perform action Baz with the given parameters. If
-     * the service is already performing a task this action will be queued.
-     *
-     * @see IntentService
-     */
-    // TODO: Customize helper method
-    public static void startActionBaz(Context context, String param1, String param2) {
-        Intent intent = new Intent(context, RestrofitService.class);
-        intent.setAction(ACTION_BAZ);
-        intent.putExtra(EXTRA_PARAM1, param1);
-        intent.putExtra(EXTRA_PARAM2, param2);
-        context.startService(intent);
+        super("load");
     }
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        if (intent != null) {
-            final String action = intent.getAction();
-            if (ACTION_FOO.equals(action)) {
-                final String param1 = intent.getStringExtra(EXTRA_PARAM1);
-                final String param2 = intent.getStringExtra(EXTRA_PARAM2);
-                handleActionFoo(param1, param2);
-            } else if (ACTION_BAZ.equals(action)) {
-                final String param1 = intent.getStringExtra(EXTRA_PARAM1);
-                final String param2 = intent.getStringExtra(EXTRA_PARAM2);
-                handleActionBaz(param1, param2);
+        loadInformation();
+
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        mContext = getApplicationContext();
+
+
+        return super.onStartCommand(intent, flags, startId);
+
+
+
+
+
+    }
+
+
+
+    public void loadInformation(){
+
+
+        final Data data=Data.getInstance();
+        ApiService api = RetroClient.getService();
+
+
+        Call<List<Channel>> callChannel= api.getJSONChannel();
+        callChannel.enqueue(new Callback<List<Channel>>() {
+            @Override
+            public void onResponse(Call<List<Channel>> call, Response<List<Channel>> response) {
+                if (response.isSuccessful()){
+                    data.setChannelList(response.body());
+                    AsynTaskLoadToDB insert=new AsynTaskLoadToDB();
+                    insert.setContext(getApplicationContext());
+                    insert.execute(1);
+
+
+
+                }
             }
-        }
+            @Override
+            public void onFailure(Call<List<Channel>> call, Throwable t) {
+
+            }
+        });
+        Call<List<Category>> callCategory= api.getJSONCategory();
+        callCategory.enqueue(new Callback<List<Category>>() {
+            @Override
+            public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
+                if (response.isSuccessful()){
+                    data.setCategoryList(response.body());
+                    AsynTaskLoadToDB insert=new AsynTaskLoadToDB();
+                    insert.setContext(getApplicationContext());
+                    insert.execute(0);
+
+                }
+            }
+            @Override
+            public void onFailure(Call<List<Category>> call, Throwable t) {
+
+            }
+        });
+
+
+
+        Call<List<Programs>> callProgram= api.getJSONPrograms( System.currentTimeMillis());
+        callProgram.enqueue(new Callback<List<Programs>>() {
+            @Override
+            public void onResponse(Call<List<Programs>> call, Response<List<Programs>> response) {
+                if (response.isSuccessful()){
+                    List<Programs>  categoryList=  response.body();
+
+
+
+                    data.setProgramList(response.body());
+                    AsynTaskLoadToDB insert=new AsynTaskLoadToDB();
+                    insert.setContext(getApplicationContext());
+                    insert.execute(2);
+
+                }
+            }
+            @Override
+            public void onFailure(Call<List<Programs>> call, Throwable t) {
+
+            }
+
+
+
+        });
+
     }
 
-    /**
-     * Handle action Foo in the provided background thread with the provided
-     * parameters.
-     */
-    private void handleActionFoo(String param1, String param2) {
-        // TODO: Handle action Foo
-        throw new UnsupportedOperationException("Not yet implemented");
-    }
-
-    /**
-     * Handle action Baz in the provided background thread with the provided
-     * parameters.
-     */
-    private void handleActionBaz(String param1, String param2) {
-        // TODO: Handle action Baz
-        throw new UnsupportedOperationException("Not yet implemented");
-    }
 }
+

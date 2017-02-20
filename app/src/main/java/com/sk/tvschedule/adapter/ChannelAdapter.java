@@ -20,7 +20,6 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.sk.tvschedule.R.id.listView;
 
 /**
  * Created by Сергій on 27.01.2017.
@@ -61,7 +60,7 @@ public class ChannelAdapter extends ArrayAdapter<Channel> {
         viewHolder.textViewChannelURL.setText(item.getUrl());
         viewHolder.textViewChannelCategory.setText(item.getCategoryId().toString());
         Picasso.with(context).load(item.getPicture()).placeholder(R.mipmap.ic_launcher).error(R.mipmap.ic_launcher).into(viewHolder.imageViewChannel);
-        viewHolder.listOfProgram.setAdapter(new ProgramsAdapter(context,getprogram(data.getProgramList(),item.getId())));
+    //    viewHolder.listOfProgram.setAdapter(new ProgramsAdapter(context,getprogram(data.getProgramList(),item.getId())));
 
         ViewGroup.LayoutParams params = viewHolder.listOfProgram.getLayoutParams();
         int a=viewHolder.listOfProgram.getCount();
@@ -108,10 +107,10 @@ public class ChannelAdapter extends ArrayAdapter<Channel> {
             TextView textViewChannelName = (TextView) relativeLayout.findViewById(R.id.textViewChannelName);
             TextView textViewChannelURL = (TextView) relativeLayout.findViewById(R.id.textViewChannelURL);
             TextView textViewChannelCategory = (TextView) relativeLayout.findViewById(R.id.textViewChannelCategory);
-            ListView listOfProgram = (ListView)relativeLayout.findViewById(R.id.listOfProgram);
+     //       ListView listOfProgram = (ListView)relativeLayout.findViewById(R.id.listOfProgram);
 
             return new ChannelAdapter.ViewHolder(relativeLayout,imageViewChannel,textViewChannelName,
-                                                textViewChannelURL,textViewChannelCategory,listOfProgram);
+                                                textViewChannelURL,textViewChannelCategory,/*listOfProgram*/null);
         }
 
 

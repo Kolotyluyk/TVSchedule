@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:allowBackup="true"
@@ -25,11 +26,31 @@
 
         <service
             android:name=".Service.RestrofitService"
-            android:exported="false" />
-        <service
-            android:name=".DB.SetData"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true">
+            <intent-filter>
+                <action android:name=".Service.RestrofitService" />
+            </intent-filter>
+        </service>
+
+
+
+        <receiver
+            android:name=".TVScheduler"
+            android:enabled="true"
+            android:permission="android.permission.RECEIVE_BOOT_COMLETED">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </receiver>
+
+
+
+        <provider android:name="com.sk.tvschedule.provider.Provider"
+            android:authorities="com.sk.tvschedule.provider.ContractClass"
+            android:exported="false"/>
+
     </application>
 
 </manifest>

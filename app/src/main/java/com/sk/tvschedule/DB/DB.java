@@ -2,17 +2,14 @@ package com.sk.tvschedule.DB;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteException;
+import android.widget.Toast;
 
 import com.sk.tvschedule.model.Category;
 import com.sk.tvschedule.model.Channel;
 import com.sk.tvschedule.model.Programs;
-import static com.sk.tvschedule.DB.DBHelper.*;
+import com.sk.tvschedule.provider.ContractClass;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Сергій on 30.01.2017.
@@ -21,213 +18,69 @@ import java.util.List;
 public class DB {
 
 
-    private List<Category> categoryList;
-    private List<Channel> channelList;
-    private List<Programs> programList;
-    private List<Integer> favoriteList;
-
-    DBHelper dbHelper;
 
 
-    public void setFavoriteList(List<Integer> favoriteList) {
-        this.favoriteList = favoriteList;
+    Context context;
+
+
+
+    public void saveProgram(ArrayList<Programs> programList) {
+       int i=0,c=0;
+            for (i = 0; i < programList.size(); i++) {
+                ContentValues cv = new ContentValues();
+                //cv.put(columnProgramId,i);
+                cv.put(ContractClass.Program.columnProgramChannelId, programList.get(i).getChannelId());
+                cv.put(ContractClass.Program.columnProgramTitle, programList.get(i).getTitle());
+                cv.put(ContractClass.Program.columnProgramDate, programList.get(i).getDate());
+                cv.put(ContractClass.Program.columnProgramTime, programList.get(i).getTime());
+                cv.put(ContractClass.Program.columnProgramDescription, programList.get(i).getDescription());
+                context.getContentResolver().insert(ContractClass.Program.CONTENT_URI, cv);
+            }
+        }
+
+
+    public void saveCategory(ArrayList<Category> categoryList) {
+        if (categoryList.size()!=0){
+               for (int i=0;i<categoryList.size();i++) {
+                ContentValues cv = new ContentValues();
+                cv.put(ContractClass.Category.columnCategoryId, categoryList.get(i).getId());
+                cv.put(ContractClass.Category.columnCategoryTitle, categoryList.get(i).getTitle());
+                cv.put(ContractClass.Category.columnCategoryPicture, categoryList.get(i).getPicture());
+                context.getContentResolver().insert(ContractClass.Category.CONTENT_URI, cv);
+            }
+        }
     }
 
 
-    public void setChannelList(List<Channel> channelList) {
-        this.channelList = channelList;
+    public void saveChannel(ArrayList<Channel> channelList) {
+        if (channelList.size()!=0){
+             for (int i=0;i<channelList.size();i++){
+                ContentValues cv = new ContentValues();
+                cv.put(ContractClass.Channel.columnChannelCategorId,channelList.get(i).getCategoryId());
+                cv.put(ContractClass.Channel.columnChannelPicture,channelList.get(i).getPicture());
+                cv.put(ContractClass.Channel.columnChannelName,channelList.get(i).getName());
+                cv.put(ContractClass.Channel.columnChannelURL,channelList.get(i).getUrl());
+                cv.put(ContractClass.Channel.columnChannelId,channelList.get(i).getId());
+                 context.getContentResolver().insert(ContractClass.Channel.CONTENT_URI, cv);
+
+            }
+        }
     }
 
-
-    public void setProgramList(List<Programs> programList) {
-        this.programList = programList;
-    }
-
-
-    public void setCategoryList(List<Category> categoryList) {
-        this.categoryList = categoryList;
+    public void saveFavorite(ArrayList<Integer> favoriteList) {
+          for (int i = 0; i < favoriteList.size(); i++) {
+            ContentValues cv = new ContentValues();
+            cv.put(ContractClass.Favorite.columnFavoriteChannelID, favoriteList.get(i));
+              context.getContentResolver().insert(ContractClass.Favorite.CONTENT_URI, cv);
+        }
     }
 
     public DB(Context context) {
 
-        dbHelper= new DBHelper(context);
+     //   dbHelper= new DBHelper(context);
+        this.context=context;
     }
 
 
-
-
-
-
-
-    public List<Category> getCategory() {
-
-        categoryList=new ArrayList<>();
-        SQLiteDatabase database = dbHelper.getWritableDatabase();
-        Cursor cursor = database.query(tableCategory, null, null, null, null, null, null);
-
-        if (cursor.moveToFirst()) {
-            int id = cursor.getColumnIndex(columnCategoryId);
-            int title= cursor.getColumnIndex(columnCategoryTitle);
-            int picture= cursor.getColumnIndex(columnCategoryPicture);
-            do {
-                Category category=new Category();
-                category.setId(cursor.getInt(id));
-                category.setPicture(cursor.getString(picture));
-                category.setTitle(cursor.getString(title));
-                categoryList.add(category);
-
-            } while (cursor.moveToNext());
-        } else
-
-
-            cursor.close();
-        return categoryList;
-
-    }
-
-
-    public List<Channel> getChannel() {
-
-        channelList=new ArrayList<>();
-        SQLiteDatabase database = dbHelper.getWritableDatabase();
-
-        Cursor cursor = database.query(tableChannel, null, null, null, null, null, null);
-
-        if (cursor.moveToFirst()) {
-            int id = cursor.getColumnIndex(columnChannelId);
-            int name= cursor.getColumnIndex(columnChannelName);
-            int categoryId= cursor.getColumnIndex(columnChannelCategorId);
-            int picture= cursor.getColumnIndex(columnChannelPicture);
-            int url= cursor.getColumnIndex(columnChannelURL);
-            do {
-                Channel channel=new Channel();
-                channel.setId(cursor.getInt(id));
-                channel.setPicture(cursor.getString(picture));
-                channel.setName(cursor.getString(name));
-                channel.setUrl(cursor.getString(url));
-                channel.setCategoryId(cursor.getInt(categoryId));
-                channelList.add(channel);
-
-            } while (cursor.moveToNext());
-        } else
-
-
-            cursor.close();
-        return channelList;
-
-    }
-
-    public List<Programs> getProgram() {
-        programList=new ArrayList<>();
-        SQLiteDatabase database = dbHelper.getWritableDatabase();
-        Cursor cursor = database.query(tableProgram, null, null, null, null, null, null);
-        if (cursor.moveToFirst()) {
-            int id = cursor.getColumnIndex(columnProgramId);
-            int channeId = cursor.getColumnIndex(columnProgramChannelId);
-            int date = cursor.getColumnIndex(columnProgramDate);
-            int description = cursor.getColumnIndex(columnProgramDescription);
-            int time = cursor.getColumnIndex(columnProgramTime);
-            int title = cursor.getColumnIndex(columnProgramTitle);
-            do {
-                Programs programs=new Programs();
-                programs.setChannelId(cursor.getInt(channeId));
-                programs.setTitle(cursor.getString(title));
-                programs.setDate(cursor.getString(date));
-                programs.setDescription(cursor.getString(description));
-                programs.setTime(cursor.getString(time));
-                programList.add(programs);
-
-            } while (cursor.moveToNext());
-        } else
-
-
-            cursor.close();
-        return programList;
-
-    }
-
-
-    public List<Integer> getFavorite() {
-        favoriteList=new ArrayList<>();
-        SQLiteDatabase database = dbHelper.getWritableDatabase();
-        Cursor cursor = database.query(tableFavorite, null, null, null, null, null, null);
-        if (cursor.moveToFirst()) {
-            int channelId = cursor.getColumnIndex(columnFavoriteChannelID);
-            do {
-                 int favoriteChannel=(cursor.getInt(channelId));
-                 favoriteList.add(favoriteChannel);
-
-            } while (cursor.moveToNext());
-        } else
-
-            cursor.close();
-        return favoriteList;
-
-    }
-
-
-
-
-    public void saveProgram() {
-        if (programList.size()!=0){
-            SQLiteDatabase db = dbHelper.getWritableDatabase();
-               dbHelper.dropTable(db, tableProgram);
-            dbHelper.createProgram(db);
-            for (int i = 0; i < programList.size(); i++) {
-                ContentValues cv = new ContentValues();
-                //     cv.put(columnProgramId,i);
-                cv.put(columnProgramChannelId, programList.get(i).getChannelId());
-                cv.put(columnProgramTitle, programList.get(i).getTitle());
-                cv.put(columnProgramDate, programList.get(i).getDate());
-                cv.put(columnProgramTime, programList.get(i).getTime());
-                cv.put(columnProgramDescription, programList.get(i).getDescription());
-                db.insert(tableProgram, null, cv);
-            }
-        }
-    }
-
-    public void saveCategory() {
-        if (categoryList.size()!=0){
-            SQLiteDatabase db = dbHelper.getWritableDatabase();
-                dbHelper.dropTable(db, tableCategory);
-            dbHelper.createCategory(db);
-            for (int i=0;i<categoryList.size();i++) {
-                ContentValues cv = new ContentValues();
-                cv.put(columnCategoryId, categoryList.get(i).getId());
-                cv.put(columnCategoryTitle, categoryList.get(i).getTitle());
-                cv.put(columnCategoryPicture, categoryList.get(i).getPicture());
-                long rowID = db.insert(tableCategory, null, cv);
-            }
-        }
-    }
-
-
-    public void saveChannel() {
-        if (channelList.size()!=0){
-            SQLiteDatabase db = dbHelper.getWritableDatabase();
-                dbHelper.dropTable(db, tableChannel);
-            dbHelper.createChannel(db);
-            for (int i=0;i<channelList.size();i++){
-                ContentValues cv = new ContentValues();
-                cv.put(columnChannelCategorId,channelList.get(i).getCategoryId());
-                cv.put(columnChannelPicture,channelList.get(i).getPicture());
-                cv.put(columnChannelName,channelList.get(i).getName());
-                cv.put(columnChannelURL,channelList.get(i).getUrl());
-                cv.put(columnChannelId,channelList.get(i).getId());
-                long rowID = db.insert(tableChannel, null, cv);
-
-            }
-        }
-    }
-
-    public void saveFavorite() {
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        dbHelper.dropTable(db, tableFavorite);
-        for (int i = 0; i < favoriteList.size(); i++) {
-            ContentValues cv = new ContentValues();
-            cv.put(columnFavoriteChannelID, favoriteList.get(i));
-            long rowID = db.insert(tableChannel, null, cv);
-        }
-    }
 }
 

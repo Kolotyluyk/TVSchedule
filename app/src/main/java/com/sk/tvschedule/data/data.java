@@ -1,6 +1,6 @@
 package com.sk.tvschedule.data;
 
-import com.sk.tvschedule.DB.DBHelper;
+//import com.sk.tvschedule.DB.DBHelper;
 import com.sk.tvschedule.model.Category;
 import com.sk.tvschedule.model.Channel;
 import com.sk.tvschedule.model.Programs;
@@ -50,7 +50,7 @@ public class Data {
         this.favoriteList = favoriteList;
     }
 
-    DBHelper dbHelper;
+  //  DBHelper dbHelper;
 
 
     private static Data ourInstance = new Data();
