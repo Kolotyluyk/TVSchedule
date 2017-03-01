@@ -340,7 +340,6 @@ public class Provider extends ContentProvider {
                  orderBy = ContractClass.Program.DEFAULT_SORT_ORDER;
                 db = dbHelper.getReadableDatabase();
                 cursor = db.query(ContractClass.Program.tableProgram , projection, selection, selectionArgs, null, null, orderBy);
-
                 break;
             case PROGRAM_ID:
                  if(TextUtils.isEmpty(selection))

@@ -34,6 +34,9 @@ public class ProgramsAdapter extends CursorAdapter {
     }
 
 
+
+
+
     @Override
     public void bindView( View convertView, Context context,Cursor cursor) {
         long id=cursor.getLong(cursor.getColumnIndex(ContractClass.Program.columnProgramId));

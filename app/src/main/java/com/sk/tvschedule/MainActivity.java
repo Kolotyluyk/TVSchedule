@@ -1,12 +1,13 @@
 package com.sk.tvschedule;
 
-import android.app.Fragment;
-import android.app.FragmentTransaction;
+
+import android.support.v4.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -17,6 +18,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.sk.tvschedule.Service.RestrofitService;
+import com.sk.tvschedule.fragment.ChannelFragment;
+import com.sk.tvschedule.fragment.ChannelTabFragment;
 import com.sk.tvschedule.fragment.ListFragmentCategory;
 import com.sk.tvschedule.fragment.ListFragmentProgram;
 
@@ -28,6 +31,8 @@ public class MainActivity extends AppCompatActivity
     boolean flag=false;
     ListFragmentCategory listFragmentCategory;
     ListFragmentProgram listFragmentProgram;
+
+    ChannelTabFragment channelTabFragment;
 
     ProgressDialog pd;
     Handler h;
@@ -59,14 +64,20 @@ public class MainActivity extends AppCompatActivity
             listFragmentCategory.setContext(this);
             listFragmentProgram=ListFragmentProgram.getInstance();
             listFragmentProgram.setContext(this);
+
+
+            channelTabFragment=new ChannelTabFragment();
+            channelTabFragment.setContext(this);
+
             getSupportLoaderManager().initLoader(1, null, listFragmentCategory);
             getSupportLoaderManager().initLoader(2, null,listFragmentProgram);
+            getSupportLoaderManager().initLoader(3, null,channelTabFragment);
 
 
-            fTrans = getFragmentManager().beginTransaction();
+            fTrans = getSupportFragmentManager().beginTransaction();
 
-            fTrans.add(R.id.frameFragment,listFragmentProgram);
-            previewFragment= listFragmentProgram;
+            fTrans.add(R.id.frameFragment,channelTabFragment);
+            previewFragment= channelTabFragment;
             fTrans.commit();
 
               }
@@ -108,20 +119,26 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_camera) {
             if (!previewFragment.equals(listFragmentProgram))
             {
-                fTrans = getFragmentManager().beginTransaction();
+                fTrans = getSupportFragmentManager().beginTransaction();
                 fTrans.remove(previewFragment);
                 fTrans.add(R.id.frameFragment,listFragmentProgram);
                 previewFragment= listFragmentProgram;
                 fTrans.commit();
             }
      } else if (id == R.id.nav_gallery) {
-            fTrans = getFragmentManager().beginTransaction();
+            fTrans = getSupportFragmentManager().beginTransaction();
             fTrans.remove(previewFragment);
             fTrans.add(R.id.frameFragment, listFragmentCategory);
             previewFragment= listFragmentCategory;
             fTrans.commit();
 
         } else if (id == R.id.nav_slideshow) {
+            fTrans = getSupportFragmentManager().beginTransaction();
+            fTrans.remove(previewFragment);
+            fTrans.add(R.id.frameFragment, channelTabFragment);
+            previewFragment= channelTabFragment;
+            fTrans.commit();
+
         } else if (id == R.id.nav_manage) {
 
 

@@ -1,10 +1,11 @@
 package com.sk.tvschedule.fragment;
 
-import android.app.Fragment;
+
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -27,15 +28,28 @@ public class ListFragmentProgram extends Fragment implements LoaderManager.Loade
     private static final int Layout= R.layout.program_list_layout;
     private View relativeLayout;
     ProgramsAdapter programsAdapter;
+    Context context;
+    int id=0;
+
+
+    public ListFragmentProgram(Context context, int id) {
+        this.context = context;
+        this.id = id;
+    }
+
+
+
+
+
 
     public void setContext(Context context) {
         this.context = context;
         programsAdapter= new ProgramsAdapter(context,null,0);
-
     }
 
-    Context context;
 
+    public ListFragmentProgram() {
+    }
 
     public static ListFragmentProgram getInstance() {
         Bundle args = new Bundle();
@@ -47,10 +61,7 @@ public class ListFragmentProgram extends Fragment implements LoaderManager.Loade
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-   //     ProgramsAdapter programsAdapter;
-
-
-    }
+     }
 
     @Nullable
     @Override
@@ -58,25 +69,23 @@ public class ListFragmentProgram extends Fragment implements LoaderManager.Loade
      relativeLayout=inflater.inflate(Layout,null);
 
           final ListView listOfProgram = (ListView)relativeLayout.findViewById(R.id.listViewProgram);
-
 listOfProgram.setAdapter(programsAdapter);
-
-
-
               return relativeLayout;
-
-
-
     }
 
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+
+        String idChannel=null;
+        if (this.id!=0) idChannel= ContractClass.Program.columnProgramChannelId+"="+this.id;
+
         return new CursorLoader(
+
                 context,
                 ContractClass.Program.CONTENT_URI,
                 ContractClass.Program.DEFAULT_PROJECTION,
-                null,
+                idChannel,
                 null,
                 null);
     }

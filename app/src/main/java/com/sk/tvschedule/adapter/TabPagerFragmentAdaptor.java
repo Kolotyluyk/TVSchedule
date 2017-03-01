@@ -1,59 +1,103 @@
 package com.sk.tvschedule.adapter;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.util.Log;
 
 import com.sk.tvschedule.fragment.ChannelFragment;
-import com.sk.tvschedule.model.Channel;
-
-import java.util.List;
+import com.sk.tvschedule.provider.ContractClass;
 
 /**
  * Created by Сергій on 01.02.2017.
  */
 
 public class TabPagerFragmentAdaptor extends FragmentPagerAdapter {
-    List<Channel> channelList;
 
-    public void setAdaptorNumb(int adaptorNumb) {
-        this.adaptorNumb = adaptorNumb;
+        protected Cursor mCursor;
+        private Context context;
+
+    public void setContext(Context context) {
+        this.context = context;
     }
 
-    int adaptorNumb;
-    Context context;
+        public TabPagerFragmentAdaptor(final FragmentManager fragmentManager, final Cursor cursor)
+        {
+            super(fragmentManager);
+            this.mCursor = cursor;
+        }
 
-    public void setChannelList(List<Channel> channelList) {
-        this.channelList = channelList;
-    }
+        @Override
+        public Fragment getItem(final int position)
+        {
+            Log.i("getitem",String.valueOf(position));
+
+
+            if (this.mCursor == null)
+            {
+                return null;
+            }
+            this.mCursor.moveToPosition(position);
+            Log.i("getitem",mCursor.getString(mCursor.getColumnIndex(ContractClass.Channel.columnChannelName)));
+
+            return this.getItem(this.mCursor);
+        }
+
+
+
+
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return channelList.get(position).getName();
-    }
+        this.mCursor.moveToPosition(position);
+       Log.i("name",mCursor.getString(mCursor.getColumnIndex(ContractClass.Channel.columnChannelName)));
+     //  return mCursor.getString(mCursor.getColumnIndex(ContractClass.Channel.columnChannelName));
 
-    public TabPagerFragmentAdaptor(Context context, FragmentManager fm, List<Channel> channelList) {
-        super(fm);
-        this.channelList=channelList;
-        this.context=context;
-
+       return "";
 
     }
 
-    @Override
-    public int getCount(){
-        if (adaptorNumb==0)
-         return channelList.size();
-    return 1;
+
+        public  Fragment getItem(final Cursor cursor){
+            ChannelFragment channelFragment=new ChannelFragment();
+            channelFragment.setCursor(cursor);
+            channelFragment.setContext(context);
+            Log.i("cursor pos", String.valueOf(cursor.getPosition()));
+            return channelFragment;
+        }
+                                        ////////////
+
+
+
+
+
+
+        @Override
+        public int getCount()
+        {
+            if (this.mCursor == null)
+            {
+                return 0;
+            }
+            return this.mCursor.getCount();
+        }
+
+        public void swapCursor(final Cursor cursor)
+        {
+            if (this.mCursor == cursor)
+            {
+                return;
+            }
+
+            this.mCursor = cursor;
+            this.notifyDataSetChanged();
+        }
+
+        public Cursor getCursor()
+        {
+            return this.mCursor;
+        }
+
     }
-
-
-    @Override
-    public Fragment getItem(int position) {
-
-            return ChannelFragment.getInstance(channelList.get(position).getId());
-
-
-}
-}

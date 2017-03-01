@@ -1,10 +1,11 @@
 package com.sk.tvschedule.fragment;
 
-import android.app.Fragment;
+
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -104,9 +105,12 @@ listOfCategory.setAdapter(categoryAdapter);
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-    //    data.moveToFirst();
         categoryAdapter.swapCursor(data);
     }
+
+
+
+
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
