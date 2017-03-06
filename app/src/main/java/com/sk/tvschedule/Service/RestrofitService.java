@@ -5,12 +5,11 @@ import android.content.Intent;
 import android.content.Context;
 
 import com.sk.tvschedule.DB.AsynTaskLoadToDB;
-import com.sk.tvschedule.adapter.CategoryAdapter;
-import com.sk.tvschedule.adapter.ChannelAdapter;
-import com.sk.tvschedule.adapter.ProgramsAdapter;
 import com.sk.tvschedule.api.ApiService;
 import com.sk.tvschedule.api.RetroClient;
 import com.sk.tvschedule.data.Data;
+import com.sk.tvschedule.event.BusStationMain;
+import com.sk.tvschedule.event.EvenrLoadedData;
 import com.sk.tvschedule.model.Category;
 import com.sk.tvschedule.model.Channel;
 import com.sk.tvschedule.model.Programs;
@@ -116,6 +115,8 @@ public class RestrofitService extends IntentService {
                     AsynTaskLoadToDB insert=new AsynTaskLoadToDB();
                     insert.setContext(getApplicationContext());
                     insert.execute(2);
+                    BusStationMain.getBus().post(new EvenrLoadedData());
+
 
                 }
             }

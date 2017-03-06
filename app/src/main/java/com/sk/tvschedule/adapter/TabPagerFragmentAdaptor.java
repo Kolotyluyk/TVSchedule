@@ -2,6 +2,8 @@ package com.sk.tvschedule.adapter;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.os.SystemClock;
+import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -32,7 +34,7 @@ public class TabPagerFragmentAdaptor extends FragmentPagerAdapter {
         @Override
         public Fragment getItem(final int position)
         {
-            Log.i("getitem",String.valueOf(position));
+            Log.i("channelFragment pos ",String.valueOf(position));
 
 
             if (this.mCursor == null)
@@ -40,7 +42,7 @@ public class TabPagerFragmentAdaptor extends FragmentPagerAdapter {
                 return null;
             }
             this.mCursor.moveToPosition(position);
-            Log.i("getitem",mCursor.getString(mCursor.getColumnIndex(ContractClass.Channel.columnChannelName)));
+         //   Log.i("getitem",mCursor.getString(mCursor.getColumnIndex(ContractClass.Channel.columnChannelName)));
 
             return this.getItem(this.mCursor);
         }
@@ -52,7 +54,7 @@ public class TabPagerFragmentAdaptor extends FragmentPagerAdapter {
     @Override
     public CharSequence getPageTitle(int position) {
         this.mCursor.moveToPosition(position);
-       Log.i("name",mCursor.getString(mCursor.getColumnIndex(ContractClass.Channel.columnChannelName)));
+       Log.i("tab adaptor name",mCursor.getString(mCursor.getColumnIndex(ContractClass.Channel.columnChannelName)));
      //  return mCursor.getString(mCursor.getColumnIndex(ContractClass.Channel.columnChannelName));
 
        return "";
@@ -61,10 +63,10 @@ public class TabPagerFragmentAdaptor extends FragmentPagerAdapter {
 
 
         public  Fragment getItem(final Cursor cursor){
-            ChannelFragment channelFragment=new ChannelFragment();
-            channelFragment.setCursor(cursor);
-            channelFragment.setContext(context);
-            Log.i("cursor pos", String.valueOf(cursor.getPosition()));
+
+            ChannelFragment channelFragment=new ChannelFragment(cursor.getInt(cursor.getColumnIndex(ContractClass.Channel.columnChannelId)));
+             channelFragment.setContext(context);
+            Log.i("channelFragment id", String.valueOf(cursor.getInt(cursor.getColumnIndex(ContractClass.Channel.columnChannelId))));
             return channelFragment;
         }
                                         ////////////
@@ -86,12 +88,14 @@ public class TabPagerFragmentAdaptor extends FragmentPagerAdapter {
 
         public void swapCursor(final Cursor cursor)
         {
-            if (this.mCursor == cursor)
+              if (this.mCursor == cursor)
             {
                 return;
             }
 
             this.mCursor = cursor;
+            Log.i("change cursor in adaptor",String.valueOf(cursor.getCount())+" time "+String.valueOf(SystemClock.currentThreadTimeMillis()));
+
             this.notifyDataSetChanged();
         }
 

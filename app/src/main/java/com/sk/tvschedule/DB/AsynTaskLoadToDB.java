@@ -39,17 +39,14 @@ public class AsynTaskLoadToDB extends AsyncTask<Integer,Void,Void> {
                     break;
 
                 case 1:
-                //    db.setChannelList();
                     db.saveChannel((ArrayList<Channel>) data.getChannelList());
                     break;
 
                 case 2:
-              //      db.setProgramList();
                     db.saveProgram((ArrayList<Programs>) data.getProgramList());
                     break;
 
                 case 3:
-                //    db.setFavoriteList();
                     db.saveFavorite((ArrayList<Integer>) data.getFavoriteList());
                     break;
             }

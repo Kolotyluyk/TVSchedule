@@ -65,8 +65,8 @@ public class ChannelFragment extends Fragment {
         TextView textViewChannelURL = (TextView) relativeLayout.findViewById(R.id.textViewChannelURL);
         ListView listOfProgram = (ListView)relativeLayout.findViewById(R.id.listViewProgram);
 
-
-    /*   cursor = context.getContentResolver().query(
+Log.i("channel id",String.valueOf(id));
+      cursor = context.getContentResolver().query(
                 ContractClass.Channel.CONTENT_URI,
                 ContractClass.Channel.DEFAULT_PROJECTION,
                 ContractClass.Channel.columnChannelId+"="+id,
@@ -74,7 +74,7 @@ public class ChannelFragment extends Fragment {
                 null);
 
         cursor.moveToFirst();
-        */
+
 
          this.id=cursor.getInt(cursor.getColumnIndex(ContractClass.Channel.columnChannelId));
         long idCategoru=cursor.getLong(cursor.getColumnIndex(ContractClass.Channel.columnChannelCategorId));

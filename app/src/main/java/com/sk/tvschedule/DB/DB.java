@@ -2,7 +2,6 @@ package com.sk.tvschedule.DB;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.widget.Toast;
 
 import com.sk.tvschedule.model.Category;
 import com.sk.tvschedule.model.Channel;
@@ -35,7 +34,9 @@ public class DB {
                 cv.put(ContractClass.Program.columnProgramTime, programList.get(i).getTime());
                 cv.put(ContractClass.Program.columnProgramDescription, programList.get(i).getDescription());
                 context.getContentResolver().insert(ContractClass.Program.CONTENT_URI, cv);
-            }
+
+
+           }
         }
 
 

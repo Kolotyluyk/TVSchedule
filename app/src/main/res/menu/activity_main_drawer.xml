@@ -3,17 +3,17 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_camera"
+            android:id="@+id/nav_cameram"
 
             android:title="   Всі програми"
             android:textSize="24sp" />
 
         <item
-            android:id="@+id/nav_gallery"
+            android:id="@+id/nav_category"
             android:textSize="24sp"
             android:title="   Категорії" />
         <item
-            android:id="@+id/nav_slideshow"
+            android:id="@+id/nav_channel"
             android:textSize="24sp"
             android:title="   Канали" />
         <item
